@@ -10,6 +10,8 @@ from datetime import date, datetime
 #import yfinance as yf
 from PIL import Image # display an image
 from io import StringIO # upload file
+from google.oauth2 import service_account
+from gsheetsdb import connect
 
 
 from io import BytesIO
@@ -26,6 +28,7 @@ from htbuilder import HtmlElement, div, hr, a, p, img, styles
 from htbuilder.units import percent, px
 import seaborn as sns
 import matplotlib.pyplot as plt
+import re
 register_matplotlib_converters()
 
 
@@ -191,6 +194,7 @@ dictionary_assets = {
 data["Stock"] = data["Stock"].map(dictionary_assets)
 list_risky_assets = data["Stock"].unique()
 
+data = data.loc[data["Year"]>=1988]
 data["Year"] = data["Year"].astype(str)
 data["Dividends"] = data["Dividends"].fillna(0)
 
@@ -201,6 +205,45 @@ st.image(image_hec, width=300)
 
 # Image Hi Paris
 image_hiparis = Image.open('images/hi-paris.png')
+
+
+
+###################################### STUDENT ID ###########################################
+
+# Load datasets with student ids
+path_ = "data/"
+list_df = []
+list_section = []
+
+for file in os.listdir(path_):
+    if "group" in file:
+        df = pd.read_csv(os.path.join(path_,file), sep=",")
+        section = re.findall(r'\d+\.\d+|\d+', file)
+        list_df.append(df)
+        list_section.append(int(section[0]))
+
+# List section
+list_section_code = list(set(list_section))
+
+
+list_ids = []
+for _,df in enumerate(list_df):
+    if df.shape[1] == 1:
+        ids = [x[-5:] for x in df[df.columns[0]].to_list() if x[-5:] != "user	"]
+        ids = [int(x) for x in ids]
+        list_ids.append(ids)
+    else:
+        list_ids.append(df["Student ID"].to_list())
+
+# List student ids 
+import itertools 
+list_ids = list(itertools.chain(*list_ids))
+student_ids = pd.Series(list_ids).dropna().sort_values().astype(int) 
+
+
+
+
+
 
 
 
@@ -229,12 +272,12 @@ select_teacher = st.sidebar.selectbox('Select your teacher ➡️', list_teacher
 
 
 ############# SELECT SECTION CODE ###############
-list_section_code = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+#list_section_code = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
 select_code = st.sidebar.selectbox('Select your section code ➡️', list_section_code)
 
 
 ############# SELECT STUDENT IDS OF GROUP ###############
-student_ids = np.arange(1000,2000,50)
+#student_ids = np.arange(1000,2000,50)
 
 session_state = {
     "selected_options": []
@@ -300,12 +343,6 @@ if lab_numbers == "01 - One risky and one risk-free asset": # premiere page
 
     ################################### DATAFRAMES ###############################
     
-    # data_risky = yf.Ticker(risky_asset)
-    # df_risky = data_risky.history(period="16mo").reset_index()[["Date","Close","Dividends"]]
-    # df_risky = df_risky.loc[(df_risky["Date"]<="2023-07-26") & (df_risky["Date"]>"2022-03-08")] 
-
-    # df_risky["Date"] = pd.to_datetime(df_risky["Date"]).apply(lambda x: x.strftime("%d/%m/%Y"))
-    # df_risky.columns = ["Date","Price","Dividends"]
 
     # Risky asset dataframe (df_risky)
     df_risky = data.loc[data["Stock"]==risky_asset]
@@ -1032,6 +1069,19 @@ answer_1_Q6_4,]
                 result.to_csv(os.path.join(path_results,"App_results_Ex1.csv"),index=False)
             
             st.sidebar.info('**Your answers have been submitted !**')
+
+
+            # Create a connection object.
+            credentials = service_account.Credentials.from_service_account_info(
+                st.secrets["gcp_service_account"],
+                scopes=[
+                    "https://www.googleapis.com/auth/spreadsheets",
+                ],
+            )
+            conn = connect(credentials=credentials)
+
+
+
             #st.dataframe(df_1)
 
         else:
@@ -1064,11 +1114,25 @@ answer_1_Q6_4,]
 
 if lab_numbers == "02 - Two risky assets":
 
-    ##################################### SIDEBAR ##########################################
-    
-    output_multiselect = st.sidebar.multiselect("Select two risky stocks", list_risky_assets, ["AIR","CECO"])
 
-     ##################################### TITLE ##########################################
+    ##################################### SIDEBAR ##########################################
+    session_state_asset = {
+    "selected_options": ["AIR","CECO"]
+    }
+
+    output_multiselect = st.sidebar.multiselect(
+        "Select two risky stocks", 
+        list_risky_assets, 
+        max_selections=2,
+        default=session_state_asset["selected_options"])
+    
+    # Update the session state list when the user changes the selection
+    session_state_asset["selected_options"] = output_multiselect
+    select_assets = "-".join([str(elem) for elem in session_state_asset["selected_options"]])
+
+
+
+    ##################################### TITLE ##########################################
     st.markdown("## 02 - Two risky assets")
     
     if len(output_multiselect) != 2:
@@ -1079,6 +1143,7 @@ if lab_numbers == "02 - Two risky assets":
         st.info("The purpose of this exercise is to understand how to **construct efficient portfolios** if you can invest in two risky assets or in two risky and one risk-free asset.")
     
         st.sidebar.markdown("  ")
+
         
         ##################################### QUESTION 1 #####################################
         st.markdown("   ")
@@ -1703,7 +1768,7 @@ if lab_numbers == "02 - Two risky assets":
         answer_2_Q5,
         answer_2_Q6]
 
-        if st.sidebar.button('**Submit answers Ex1**'):
+        if st.sidebar.button('**Submit answers Ex2**'):
 
             if len(session_state["selected_options"]) != 0:
                 select_group = "-".join([str(elem) for elem in session_state["selected_options"]])
@@ -1718,6 +1783,7 @@ if lab_numbers == "02 - Two risky assets":
                 'Lab': 2,
                 # "Stock": risky_asset,
                 # 'Time': startdate - datetime.now(),
+                'Assets':select_assets,
                 'Start time':startdate,
                 'End time': datetime.now(),
                 'Completed':count,
