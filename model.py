@@ -211,39 +211,41 @@ image_hiparis = Image.open('images/hi-paris.png')
 ###################################### STUDENT ID ###########################################
 
 # Load datasets with student ids
-path_ = "data/"
-list_df = []
-list_section = []
+# path_ = "data/"
+# list_df = []
+# list_section = []
 
-for file in os.listdir(path_):
-    if "group" in file:
-        df = pd.read_csv(os.path.join(path_,file), sep=",")
-        section = re.findall(r'\d+\.\d+|\d+', file)
-        list_df.append(df)
-        list_section.append(int(section[0]))
+# for file in os.listdir(path_):
+#     if "group" in file:
+#         df = pd.read_csv(os.path.join(path_,file), sep=",")
+#         section = re.findall(r'\d+\.\d+|\d+', file)
+#         list_df.append(df)
+#         list_section.append(int(section[0]))
 
-# List section
-list_section_code = list(set(list_section))
-
-
-list_ids = []
-for _,df in enumerate(list_df):
-    if df.shape[1] == 1:
-        ids = [x[-5:] for x in df[df.columns[0]].to_list() if x[-5:] != "user	"]
-        ids = [int(x) for x in ids]
-        list_ids.append(ids)
-    else:
-        list_ids.append(df["Student ID"].to_list())
-
-# List student ids 
-import itertools 
-list_ids = list(itertools.chain(*list_ids))
-student_ids = pd.Series(list_ids).dropna().sort_values().astype(int) 
+# # List section
+# list_section_code = list(set(list_section))
 
 
+# list_ids = []
+# for _,df in enumerate(list_df):
+#     if df.shape[1] == 1:
+#         ids = [x[-5:] for x in df[df.columns[0]].to_list() if x[-5:] != "user	"]
+#         ids = [int(x) for x in ids]
+#         list_ids.append(ids)
+#     else:
+#         list_ids.append(df["Student ID"].to_list())
+
+# # List student ids 
+# import itertools 
+# list_ids = list(itertools.chain(*list_ids))
+# student_ids = pd.Series(list_ids).dropna().sort_values().astype(int) 
 
 
+# pd.DataFrame(student_ids,columns=["Student ID"]).to_csv("student_ids.csv",index=True)
+# pd.DataFrame(list_section_code,columns=["Section code"]).to_csv("section_code.csv",index=True)
 
+student_ids = pd.read_csv("student_ids.csv")["Student ID"].to_list()
+list_section_code = pd.read_csv("section_code.csv")["Section code"].to_list()
 
 
 
