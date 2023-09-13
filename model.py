@@ -10,7 +10,7 @@ from datetime import date, datetime
 #import yfinance as yf
 from PIL import Image # display an image
 from io import StringIO # upload file
-from google import oauth2.service_account
+from google.oauth2 import service_account
 from gsheetsdb import connect
 
 
@@ -1072,7 +1072,7 @@ answer_1_Q6_4,]
 
 
             # Create a connection object.
-            credentials = oauth2.service_account.Credentials.from_service_account_info(
+            credentials = service_account.Credentials.from_service_account_info(
                 st.secrets["gcp_service_account"],
                 scopes=[
                     "https://www.googleapis.com/auth/spreadsheets",
