@@ -325,17 +325,21 @@ default_text = ""
 
 
 ######### CONNEXION WITH GOOGLE SHEET API ##########
-        
+
+scope = [
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive"
+    ]
+
 ## Connect to google sheet
 credentials = service_account.Credentials.from_service_account_info(
     st.secrets["gcp_service_account"],
-    scopes=[
-        "https://www.googleapis.com/auth/spreadsheets",
-        "https://www.googleapis.com/auth/drive"
-    ],
+    scopes=scope,
 )
 
 gc = gspread.authorize(credentials)
+
+#client = Client(scope=scope, credentials=credentials)
 
 
 
@@ -1829,6 +1833,8 @@ if lab_numbers == "02 - Two risky assets":
                 sh = gc.open('App-finance-HEC-students-results').get_worksheet(1)
                 insertRow = list_answers_
                 sh.append_row(insertRow)
+
+                st.sidebar.info('**Your answers have been submitted !**')
 
             
             else:
