@@ -12,6 +12,7 @@ from PIL import Image # display an image
 from io import StringIO # upload file
 from google.oauth2 import service_account
 from gsheetsdb import connect
+import gspread
 
 
 from io import BytesIO
@@ -1030,6 +1031,8 @@ answer_1_Q6_4,]
             'Q6_4':answer_1_Q6_4, 
             },index=[0])
 
+            #st.dataframe(df_1)
+
             path_results = r"results/"
 
             if "App_results_Ex1.csv" not in os.listdir(path_results):
@@ -1046,11 +1049,18 @@ answer_1_Q6_4,]
             # Create a connection object.
             credentials = service_account.Credentials.from_service_account_info(
                 st.secrets["gcp_service_account"],
-                scopes=[
-                    "https://www.googleapis.com/auth/spreadsheets",
-                ],
+                # scopes=[
+                #     "https://www.googleapis.com/auth/spreadsheets",
+                # ],
             )
-            conn = connect(credentials=credentials)
+
+            client = gspread.authorize(credentials)
+            sheet = client.open("App-finance-HEC-students-results").sheet1
+            insertRow = df_1.iloc[0,:].to_list()
+            sheet.append_row(insertRow)
+            #conn = connect(credentials=credentials)
+
+            
 
 
 
