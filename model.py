@@ -324,6 +324,22 @@ default_text = ""
 
 
 
+######### CONNEXION WITH GOOGLE SHEET API ##########
+        
+## Connect to google sheet
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"],
+    scopes=[
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive"
+    ],
+)
+
+gc = gspread.authorize(credentials)
+
+
+
+
 
 
 #####################################################################################
@@ -434,7 +450,7 @@ if lab_numbers == "01 - One risky and one risk-free asset": # premiere page
         returns_portfolios = pd.read_excel(upload_expected_return)
 
     else:
-        answer_1_Q1_1 = np.nan
+        answer_1_Q1_1 = ""
 
 
 
@@ -624,7 +640,7 @@ if lab_numbers == "01 - One risky and one risk-free asset": # premiere page
         returns_portfolios = pd.read_excel(upload_file)
 
     else:
-        answer_1_Q3_1 = np.nan
+        answer_1_Q3_1 = ""
 
 
 
@@ -666,7 +682,7 @@ if lab_numbers == "01 - One risky and one risk-free asset": # premiere page
         #st.image(image, caption='Graph of the set of feasible portfolios')
 
     else:
-        answer_1_Q3_2 = np.nan
+        answer_1_Q3_2 = ""
 
 
     solution = st.checkbox('**Solution** ✅',key="SQ3.23")
@@ -817,7 +833,7 @@ if lab_numbers == "01 - One risky and one risk-free asset": # premiere page
         expected_return_portfolios = pd.read_excel(upload_expected_return)
 
     else:
-        answer_1_Q5_1 = np.nan
+        answer_1_Q5_1 = ""
 
     solution = st.checkbox('**Solution** ✅', key="SQ5.1")
     if solution:
@@ -840,7 +856,7 @@ if lab_numbers == "01 - One risky and one risk-free asset": # premiere page
         #st.image(image, caption='Graph of the set of feasible portfolios')
 
     else:
-        answer_1_Q5_2 = np.nan
+        answer_1_Q5_2 = ""
         
 
     solution = st.checkbox('**Solution** ✅',key="SQ5.2")
@@ -958,38 +974,8 @@ answer_1_Q6_2,
 answer_1_Q6_3,
 answer_1_Q6_4,]
 
-#     count = len([x for x in list_answer if x not in [0, 0.0, None, "Write the answer in this box","0"]])
-#     df_1 = pd.DataFrame({
-#     'Professor': select_teacher,
-#     'Section': select_code,
-#     'Group': select_group,
-#     'Part1': 1,
-#     'Start time':startdate,
-#     'End time': '05/09/2023 10:40',
-#     'Completed':count,
-#     'Completed %':round(count/19*100,2),
-#     'Q1_1':answer_1_Q1_1,
-#     'Q1_2':answer_1_Q1_2,
-#     'Q1_3':answer_1_Q1_3,
-#     'Q2_1':answer_1_Q2_1,
-#     'Q2_2':answer_1_Q2_2,
-#     'Q2_3':answer_1_Q2_3,
-#     'Q2_4':answer_1_Q2_4,
-#     'Q3_1':answer_1_Q3_1,
-#     'Q3_2':answer_1_Q3_2,
-#     'Q4_1':answer_1_Q4_1,
-#     'Q4_2':answer_1_Q4_2,
-#     'Q4_3':answer_1_Q4_3,
-#     'Q4_4':answer_1_Q4_4,
-#     'Q5_1':answer_1_Q5_1,
-#     'Q5_2':answer_1_Q5_2,
-#     'Q6_1':answer_1_Q6_1,
-#     'Q6_2':answer_1_Q6_2,
-#     'Q6_3':answer_1_Q6_3,
-#     'Q6_4':answer_1_Q6_4
-#     })
 
-    #st.dataframe(df_1)
+    ## SUBMISSION EXERCICE 1
     if st.sidebar.button('**Submit answers Ex1**'):
 
         if len(session_state["selected_options"]) != 0:
@@ -998,79 +984,93 @@ answer_1_Q6_4,]
             answers = [x for x in list_answer if x not in [np.nan,"", None]]
             count = len(answers)
 
-            df_1 = pd.DataFrame({
-            'Professor': select_teacher,
-            'Section': select_code,
-            'Group': select_group,
-            'Lab': 1,
-            'Asset':risky_asset,
-            # "Stock": risky_asset,
-            # 'Time': startdate - datetime.now(),
-            'Start time':startdate,
-            'End time': datetime.now(),
-            'Completed':count,
-            'Completed %':round((count/len(list_answer))*100,1),
-            'Q1_1':answer_1_Q1_1,
-            'Q1_2':answer_1_Q1_2,
-            'Q1_3':answer_1_Q1_3,
-            'Q2_1':answer_1_Q2_1,
-            'Q2_2':answer_1_Q2_2,
-            'Q2_3':answer_1_Q2_3,
-            'Q2_4':answer_1_Q2_4,
-            'Q3_1':answer_1_Q3_1,
-            'Q3_2':answer_1_Q3_2,
-            'Q4_1':answer_1_Q4_1,
-            'Q4_2':answer_1_Q4_2,
-            'Q4_3':answer_1_Q4_3,
-            'Q4_4':answer_1_Q4_4,
-            'Q5_1':answer_1_Q5_1,
-            'Q5_2':answer_1_Q5_2,
-            'Q6_1':answer_1_Q6_1,
-            'Q6_2':answer_1_Q6_2,
-            'Q6_3':answer_1_Q6_3,
-            'Q6_4':answer_1_Q6_4, 
-            },index=[0])
+            # df_1 = pd.DataFrame({
+            # 'Professor': select_teacher,
+            # 'Section': select_code,
+            # 'Group': select_group,
+            # 'Lab': 1,
+            # 'Asset':risky_asset,
+            # # "Stock": risky_asset,
+            # # 'Time': startdate - datetime.now(),
+            # 'Start time':startdate,
+            # 'End time': datetime.now(),
+            # 'Completed':count,
+            # 'Completed %':str(round((count/len(list_answer))*100,1)),
+            # 'Q1_1':answer_1_Q1_1,
+            # 'Q1_2':answer_1_Q1_2,
+            # 'Q1_3':answer_1_Q1_3,
+            # 'Q2_1':answer_1_Q2_1,
+            # 'Q2_2':answer_1_Q2_2,
+            # 'Q2_3':answer_1_Q2_3,
+            # 'Q2_4':answer_1_Q2_4,
+            # 'Q3_1':answer_1_Q3_1,
+            # 'Q3_2':answer_1_Q3_2,
+            # 'Q4_1':answer_1_Q4_1,
+            # 'Q4_2':answer_1_Q4_2,
+            # 'Q4_3':answer_1_Q4_3,
+            # 'Q4_4':answer_1_Q4_4,
+            # 'Q5_1':answer_1_Q5_1,
+            # 'Q5_2':answer_1_Q5_2,
+            # 'Q6_1':answer_1_Q6_1,
+            # 'Q6_2':answer_1_Q6_2,
+            # 'Q6_3':answer_1_Q6_3,
+            # 'Q6_4':answer_1_Q6_4, 
+            # },index=[0])
 
-            #st.dataframe(df_1)
+            # path_results = r"results/"
 
-            path_results = r"results/"
+            # if "App_results_Ex1.csv" not in os.listdir(path_results):
+            #     df_1.to_csv(os.path.join(path_results,"App_results_Ex1.csv"),index=False)
 
-            if "App_results_Ex1.csv" not in os.listdir(path_results):
-                df_1.to_csv(os.path.join(path_results,"App_results_Ex1.csv"),index=False)
+            # else:
+            #     df_old = pd.read_csv(os.path.join(path_results,"App_results_Ex1.csv"))
+            #     result = pd.concat([df_old, df_1], ignore_index=True)
+            #     result.to_csv(os.path.join(path_results,"App_results_Ex1.csv"),index=False)
 
-            else:
-                df_old = pd.read_csv(os.path.join(path_results,"App_results_Ex1.csv"))
-                result = pd.concat([df_old, df_1], ignore_index=True)
-                result.to_csv(os.path.join(path_results,"App_results_Ex1.csv"),index=False)
+            # List with answers 
+            list_answers_ = [select_teacher,
+            select_code,
+            select_group,
+            1,
+            risky_asset,
+            str(startdate),
+            str(datetime.now()),
+            count,
+            f"{round((count/len(list_answer))*100,1)}%",
+            answer_1_Q1_1,
+            answer_1_Q1_2,
+            answer_1_Q1_3,
+            answer_1_Q2_1,
+            answer_1_Q2_2,
+            answer_1_Q2_3,
+            answer_1_Q2_4,
+            answer_1_Q3_1,
+            answer_1_Q3_2,
+            answer_1_Q4_1,
+            answer_1_Q4_2,
+            answer_1_Q4_3,
+            answer_1_Q4_4,
+            answer_1_Q5_1,
+            answer_1_Q5_2,
+            answer_1_Q6_1,
+            answer_1_Q6_2,
+            answer_1_Q6_3,
+            answer_1_Q6_4,
+            ]
             
+
+            ## Append new row to the google sheet
+            sh = gc.open('App-finance-HEC-students-results').sheet1
+            insertRow = list_answers_
+            sh.append_row(insertRow)
+
             st.sidebar.info('**Your answers have been submitted !**')
-
-
-            # Create a connection object.
-            credentials = service_account.Credentials.from_service_account_info(
-                st.secrets["gcp_service_account"],
-                # scopes=[
-                #     "https://www.googleapis.com/auth/spreadsheets",
-                # ],
-            )
-
-            client = gspread.authorize(credentials)
-            sheet = client.open("App-finance-HEC-students-results").sheet1
-            insertRow = df_1.iloc[0,:].to_list()
-            sheet.append_row(insertRow)
-            #conn = connect(credentials=credentials)
-
             
-
-
-
-            #st.dataframe(df_1)
-
         else:
             st.sidebar.info("**Please select at least one student id before submitting your answers !**")
 
-# st.sidebar.divider()
-# st.sidebar.header("****Acknowledgement****")
+
+    ## Hi! PARIS logo
     st.sidebar.divider()
     st.sidebar.image(image_hiparis, width=150)
     url = "https://www.hi-paris.fr/"
@@ -1200,7 +1200,7 @@ if lab_numbers == "02 - Two risky assets":
             answer_2_Q1_1a = upload_file.name
         
         else:
-            answer_2_Q1_1a = np.nan
+            answer_2_Q1_1a = ""
 
         # Solution
         solution = st.checkbox('**Solution** ✅',key="SQ2.11")
@@ -1298,7 +1298,7 @@ if lab_numbers == "02 - Two risky assets":
             answer_2_Q1_2a = upload_expected_return.name
 
         else:
-            answer_2_Q1_2a = np.nan
+            answer_2_Q1_2a = ""
 
         solution = st.checkbox('**Solution** ✅',key="SQ2.21")
         if solution:
@@ -1428,7 +1428,7 @@ if lab_numbers == "02 - Two risky assets":
             answer_2_Q2 = upload_expected_return.name
 
         else:
-            answer_2_Q2 = np.nan
+            answer_2_Q2 = ""
 
 
         solution = st.checkbox('**Solution** ✅', key="SQ3.1")
@@ -1502,7 +1502,7 @@ if lab_numbers == "02 - Two risky assets":
             answer_2_Q3_2 = upload_efficient_portfolios
 
         else:
-            answer_2_Q3_2 = np.nan
+            answer_2_Q3_2 = ""
 
         min_std = df_exp_std_return_portfolios["Standard deviation"].idxmin()
 
@@ -1525,7 +1525,7 @@ if lab_numbers == "02 - Two risky assets":
             answer_2_Q3_3 = upload_graph.name
         
         else:
-            answer_2_Q3_3 = np.nan
+            answer_2_Q3_3 = ""
             
 
         solution = st.checkbox('**Solution** ✅',key="SQ3.23")
@@ -1566,7 +1566,7 @@ if lab_numbers == "02 - Two risky assets":
             answer_2_Q4_1 = upload_portfolios.name
 
         else:
-            answer_2_Q4_1 = np.nan
+            answer_2_Q4_1 = ""
 
         solution = st.checkbox('**Solution** ✅',key="Q4.Ex2.S11")
         if solution:
@@ -1585,7 +1585,7 @@ if lab_numbers == "02 - Two risky assets":
             answer_2_Q4_2 = upload_efficient_portfolios.name
 
         else:
-            answer_2_Q4_2 = np.nan
+            answer_2_Q4_2 = ""
 
         
         min_std = df_exp_std_return_portfolios_q4["Standard deviation"].idxmin()
@@ -1717,7 +1717,7 @@ if lab_numbers == "02 - Two risky assets":
         if upload_efficient_portfolios is not None:
             answer_2_Q6 = upload_efficient_portfolios
         else:
-            answer_2_Q6 = np.nan
+            answer_2_Q6 = ""
 
         solution = st.checkbox('**Solution** ✅',key="SQ6.Ex2")
         
@@ -1758,47 +1758,78 @@ if lab_numbers == "02 - Two risky assets":
                 answers = [x for x in list_answer if x not in [np.nan,"", None]]
                 count = len(answers)
 
-                df_2 = pd.DataFrame({
-                'Professor': select_teacher,
-                'Section': select_code,
-                'Group': select_group,
-                'Lab': 2,
-                # "Stock": risky_asset,
-                # 'Time': startdate - datetime.now(),
-                'Assets':select_assets,
-                'Start time':startdate,
-                'End time': datetime.now(),
-                'Completed':count,
-                'Completed %':round((count/len(list_answer))*100,1),
-                'Q1_1a':answer_2_Q1_1a,
-                'Q1_1b':answer_2_Q1_1b,
-                'Q1_1c':answer_2_Q1_1c,
-                'Q1_2a':answer_2_Q1_2a,
-                'Q1_2b':answer_2_Q1_2b,
-                'Q1_2c':answer_2_Q1_2c,
-                'Q1_3':answer_2_Q1_3,
-                'Q2':answer_2_Q2,
-                'Q3_1':answer_2_Q3_1,
-                'Q3_2':answer_2_Q3_2,
-                'Q3_3':answer_2_Q3_3,
-                'Q4_1':answer_2_Q4_1,
-                'Q4_2':answer_2_Q4_2,
-                'Q5': answer_2_Q5,
-                'Q6':answer_2_Q6,
-                },index=[0])
+                # df_2 = pd.DataFrame({
+                # 'Professor': select_teacher,
+                # 'Section': select_code,
+                # 'Group': select_group,
+                # 'Lab': 2,
+                # # "Stock": risky_asset,
+                # # 'Time': startdate - datetime.now(),
+                # 'Assets':select_assets,
+                # 'Start time':startdate,
+                # 'End time': datetime.now(),
+                # 'Completed':count,
+                # 'Completed %':round((count/len(list_answer))*100,1),
+                # 'Q1_1a':answer_2_Q1_1a,
+                # 'Q1_1b':answer_2_Q1_1b,
+                # 'Q1_1c':answer_2_Q1_1c,
+                # 'Q1_2a':answer_2_Q1_2a,
+                # 'Q1_2b':answer_2_Q1_2b,
+                # 'Q1_2c':answer_2_Q1_2c,
+                # 'Q1_3':answer_2_Q1_3,
+                # 'Q2':answer_2_Q2,
+                # 'Q3_1':answer_2_Q3_1,
+                # 'Q3_2':answer_2_Q3_2,
+                # 'Q3_3':answer_2_Q3_3,
+                # 'Q4_1':answer_2_Q4_1,
+                # 'Q4_2':answer_2_Q4_2,
+                # 'Q5': answer_2_Q5,
+                # 'Q6':answer_2_Q6,
+                # },index=[0])
 
-                path_results = r"results/"
+                # path_results = r"results/"
 
-                if "App_results_Ex2.csv" not in os.listdir(path_results):
-                    pd.DataFrame(columns=df_2.columns).to_csv("App_results_Ex2.csv",index=False)
+                # if "App_results_Ex2.csv" not in os.listdir(path_results):
+                #     pd.DataFrame(columns=df_2.columns).to_csv("App_results_Ex2.csv",index=False)
 
-                else:
-                    df_old = pd.read_csv(os.path.join(path_results,"App_results_Ex2.csv"))
-                    result = pd.concat([df_old, df_2], ignore_index=True)
-                    result.to_csv(os.path.join(path_results,"App_results_Ex1.csv"),index=False)
+                # else:
+                #     df_old = pd.read_csv(os.path.join(path_results,"App_results_Ex2.csv"))
+                #     result = pd.concat([df_old, df_2], ignore_index=True)
+                #     result.to_csv(os.path.join(path_results,"App_results_Ex1.csv"),index=False)
                 
-                st.sidebar.info('**Your answers have been submitted !**')
-                st.dataframe(df_2)
+                # st.sidebar.info('**Your answers have been submitted !**')
+
+                list_answers_ = [select_teacher,
+                select_code,
+                select_group,
+                2,
+                select_assets,
+                str(startdate),
+                str(datetime.now()),
+                count,
+                f"{round((count/len(list_answer))*100,1)}%",
+                answer_2_Q1_1a,
+                answer_2_Q1_1b,
+                answer_2_Q1_1c,
+                answer_2_Q1_2a,
+                answer_2_Q1_2b,
+                answer_2_Q1_2c,
+                answer_2_Q1_3,
+                answer_2_Q2,
+                answer_2_Q3_1,
+                answer_2_Q3_2,
+                answer_2_Q3_3,
+                answer_2_Q4_1,
+                answer_2_Q4_2,
+                answer_2_Q5,
+                answer_2_Q6]
+                
+
+                ## Append new row to the google sheet
+                sh = gc.open('App-finance-HEC-students-results').get_worksheet(1)
+                insertRow = list_answers_
+                sh.append_row(insertRow)
+
             
             else:
                 st.sidebar.info("**Please select at least one student id before submitting your answers.**")
