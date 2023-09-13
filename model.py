@@ -7,7 +7,7 @@ import base64
 import io
 import os
 from datetime import date, datetime
-import yfinance as yf
+#import yfinance as yf
 from PIL import Image # display an image
 from io import StringIO # upload file
 
@@ -29,12 +29,12 @@ import matplotlib.pyplot as plt
 register_matplotlib_converters()
 
 
-from statsmodels.tsa.seasonal import seasonal_decompose
-from statsmodels.tsa.stattools import adfuller
-import statsmodels.api as sm
-import pmdarima as pm
+# from statsmodels.tsa.seasonal import seasonal_decompose
+# from statsmodels.tsa.stattools import adfuller
+# import statsmodels.api as sm
+# import pmdarima as pm
 
-from fpdf import FPDF
+# from fpdf import FPDF
 
 
 
