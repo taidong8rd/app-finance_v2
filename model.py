@@ -338,8 +338,6 @@ if lab_numbers == "01 - One risky and one risk-free asset": # premiere page
     risky_asset = st.sidebar.selectbox("Select a risky asset ➡️", list_risky_assets, key="select_risky")
     #risk_free_asset = "^FVX"
 
-    st.write(risky_asset)
-
     st.sidebar.markdown("  ")
     
 
@@ -1063,10 +1061,10 @@ answer_1_Q6_4,]
 
 # st.sidebar.divider()
 # st.sidebar.header("****Acknowledgement****")
-st.sidebar.divider()
-st.sidebar.image(image_hiparis, width=150)
-url = "https://www.hi-paris.fr/"
-st.sidebar.markdown("**Made in collaboration with: [Hi! PARIS Engineering Team](%s)**" % url)
+    st.sidebar.divider()
+    st.sidebar.image(image_hiparis, width=150)
+    url = "https://www.hi-paris.fr/"
+    st.sidebar.markdown("**Made in collaboration with: [Hi! PARIS Engineering Team](%s)**" % url)
     
     
 
@@ -1794,6 +1792,11 @@ if lab_numbers == "02 - Two risky assets":
             
             else:
                 st.sidebar.info("**Please select at least one student id before submitting your answers.**")
+        
+        st.sidebar.divider()
+        st.sidebar.image(image_hiparis, width=150)
+        url = "https://www.hi-paris.fr/"
+        st.sidebar.markdown("**Made in collaboration with: [Hi! PARIS Engineering Team](%s)**" % url)
 
 
 
