@@ -1068,6 +1068,10 @@ answer_1_Q6_4,]
             insertRow = list_answers_
             sh.append_row(insertRow)
 
+            sh_looker = gc.open('App-finance-HEC-students-results').get_worsksheet(2)
+            insertRow2 = list_answers_[:9]
+            sh_looker.append_row(insertRow2)
+
             st.sidebar.info('**Your answers have been submitted !**')
             
         else:
@@ -1833,6 +1837,11 @@ if lab_numbers == "02 - Two risky assets":
                 sh = gc.open('App-finance-HEC-students-results').get_worksheet(1)
                 insertRow = list_answers_
                 sh.append_row(insertRow)
+
+                sh_looker = gc.open('App-finance-HEC-students-results').get_worsksheet(2)
+                insertRow2 = list_answers_[:9]
+                sh_looker.append_row(insertRow2)
+                 
 
                 st.sidebar.info('**Your answers have been submitted !**')
 
