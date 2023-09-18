@@ -246,7 +246,9 @@ image_hiparis = Image.open('images/hi-paris.png')
 # pd.DataFrame(list_section_code,columns=["Section code"]).to_csv("section_code.csv",index=True)
 
 student_ids = pd.read_csv("student_ids.csv")["Student ID"].to_list()
-list_section_code = pd.read_csv("section_code.csv")["Section code"].to_list()
+#list_section_code = pd.read_csv("section_code.csv")["Section code"].to_list()
+list_section_code = [f"B1-{i}" for i in range(1,15)]
+list_section_code.append(["B4-1","B4-2"])
 
 
 
