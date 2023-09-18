@@ -32,6 +32,8 @@ MANIFEST
 # Data files
 data/
 
+
+
 # secrets 
 .streamlit/
 
