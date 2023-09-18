@@ -625,7 +625,7 @@ if lab_numbers == "01 - One risky and one risk-free asset": # premiere page
     
     # Expected returns/std of portfolios
     expected_returns_portfolios = np.array([w*asset_expected_return + (1-w)*riskfree_exp_returns for w in weight_risky_portfolios])
-    std_portfolios = np.array([(w**asset_std_dev)**2 + ((1-w)*riskfree_std)**2 for w in weight_risky_portfolios])
+    std_portfolios = np.array([(w*asset_std_dev)**2 + ((1-w)*riskfree_std)**2 for w in weight_risky_portfolios])
     std_portfolios = np.sqrt(std_portfolios)
 
     # Portfolio dataframe to plot
