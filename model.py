@@ -11,7 +11,7 @@ from datetime import date, datetime
 from PIL import Image # display an image
 from io import StringIO # upload file
 from google.oauth2 import service_account
-from gsheetsdb import connect
+#from gsheetsdb import connect
 import gspread
 
 
@@ -193,7 +193,9 @@ dictionary_assets = {
 }
 
 data["Stock"] = data["Stock"].map(dictionary_assets)
+data = data.loc[data["Stock"].isin(["AAL", "PNW","ABT"])==False]
 list_risky_assets = data["Stock"].unique()
+list_risky_assets.sort()
 
 data = data.loc[data["Year"]>=1988]
 data["Year"] = data["Year"].astype(str)
@@ -206,6 +208,7 @@ st.image(image_hec, width=300)
 
 # Image Hi Paris
 image_hiparis = Image.open('images/hi-paris.png')
+
 
 
 
@@ -377,7 +380,6 @@ if lab_numbers == "01 - One risky and one risk-free asset": # premiere page
 
     riskfree_returns = np.array([0.02 for i in range(df_risky.shape[0]-1)])
     riskfree_exp_returns = np.mean(riskfree_returns)
-    st.write(riskfree_exp_returns)
     riskfree_std = np.std(riskfree_returns, ddof=1)
     
 
@@ -386,7 +388,11 @@ if lab_numbers == "01 - One risky and one risk-free asset": # premiere page
 
     ##################################### TITLE ####################################
     st.markdown("## 01 - One risky and one risk-free asset")
-    st.info("In this exercise, assume that there exists a risk-free asset (a T-bond) with an annual rate of return of 2%. You are given information on daily prices and dividends of individual (risky) stocks. You are asked to choose one risky stock and to compute its expected return and standard deviation of return. Then you have to find the (standard deviation of return, expected return) pairs you can obtain by combining this risky stock with the risk-free asset into portfolios.")
+    st.info(""" In this exercise, assume that you can invest in a risk-free asset (a T-bill) with an annual rate of return of 2%. 
+            In addition, you have information on annual prices and dividends of individual risky stocks. Please choose one stock and compute its expected return and the standard deviation of its return. 
+            Then, describe feasible portfolios that you can obtain by investing in the risk-free asset and chosen stock. 
+            Please represent the set of feasible portfolios in a graph that has the standard deviation of the portfolio’s return on the x-axis and the expected return on the y-axis.
+    """)
     st.markdown("    ")
     st.markdown("    ")
 
