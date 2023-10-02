@@ -1739,16 +1739,16 @@ if check_password():
                     weight_riskportfolio.append(wp)
                     weight_riskfree.append(1-wp)
 
-                    #weight_risk1_portfolioR.append(w1/wp)
-                    #weight_risk2_portfolioR.append((wp-w1)/wp)
+                    weight_risk1_portfolioR.append(w1/wp)
+                    weight_risk2_portfolioR.append((wp-w1)/wp)
 
-                    if wp != 0:
-                        weight_risk1_portfolioR.append(w1/wp)
-                        weight_risk2_portfolioR.append((wp-w1)/wp)
-                    else:
-                        # Handle the case when wp is zero. You can append NaN, None, or some default value.
-                        weight_risk1_portfolioR.append(None)
-                        weight_risk2_portfolioR.append(None)
+                    #if wp != 0:
+                    #    weight_risk1_portfolioR.append(w1/wp)
+                    #    weight_risk2_portfolioR.append((wp-w1)/wp)
+                    #else:
+                    #    # Handle the case when wp is zero. You can append NaN, None, or some default value.
+                    #    weight_risk1_portfolioR.append(None)
+                    #    weight_risk2_portfolioR.append(None)
 
             df_full_portfolio = pd.DataFrame({risky_asset1_ex2:np.round(weight_risk1_full,2),
                                             f"{risky_asset1_ex2} (in risky portfolio)":np.round(weight_risk1_portfolioR,2),
