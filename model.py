@@ -1720,7 +1720,8 @@ if check_password():
             #weight_portfoliosR = np.round(np.arange(-0.5,1.55,0.05),2)
             #weight_riskfree = 1 - weight_portfoliosR
 
-            weight_portfoliosR = np.round(np.arange(0,1.01,0.01),2)
+            #weight_portfoliosR = np.round(np.arange(0,1.01,0.01),2)
+            weight_portfoliosR = np.round(np.arange(0.1,1.2,0.01),2)
             weight_riskfree = 1 - weight_portfoliosR
 
             weight_risk1_full = []
