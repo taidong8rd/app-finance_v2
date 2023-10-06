@@ -1123,6 +1123,7 @@ if check_password():
                 ## Append new row to the google sheet
                 sh = gc.open('App-finance-HEC-students-results').sheet1
                 insertRow = list_answers_
+                st.write(insertRow)
                 sh.append_row(insertRow)
 
                 sh_looker = gc.open('App-finance-HEC-students-results').get_worksheet(2)
