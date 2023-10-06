@@ -1547,7 +1547,7 @@ if check_password():
 
             upload_efficient_portfolios = st.file_uploader("Drop your results in an excel file (.xlsx)", key="Q3.Ex2.U12",type=['xlsx'])
             if upload_efficient_portfolios is not None:
-                answer_2_Q3_2 = upload_efficient_portfolios
+                answer_2_Q3_2 = upload_efficient_portfolios.name
 
             else:
                 answer_2_Q3_2 = ""
