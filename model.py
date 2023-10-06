@@ -1787,7 +1787,7 @@ if check_password():
             st.write("**What is the set of efficient portfolios ?**")
             upload_efficient_portfolios = st.file_uploader("Drop your results in an excel file (.xlsx)", key="UQ6.Ex6",type=['xlsx'])
             if upload_efficient_portfolios is not None:
-                answer_2_Q6 = upload_efficient_portfolios
+                answer_2_Q6 = upload_efficient_portfolios.name
             else:
                 answer_2_Q6 = ""
 
