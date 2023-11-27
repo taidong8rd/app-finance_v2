@@ -33,6 +33,11 @@ import re
 register_matplotlib_converters()
 
 
+# New features
+from langchain.llms import OpenAI
+from streamlit_extras.jupyterlite import jupyterlite
+
+
 # from statsmodels.tsa.seasonal import seasonal_decompose
 # from statsmodels.tsa.stattools import adfuller
 # import statsmodels.api as sm
@@ -294,6 +299,18 @@ if check_password():
 
 
 
+# ########### TITLE #############
+
+    st.image(image_hec, width=300)
+    st.title("HEC Paris - Finance Labs🧪")
+    st.subheader("Portfolio theory 📈")
+    st.markdown("Course provided by: **François Derrien**, **Irina Zviadadze**, **Quirin Fleckenstein**, **Mian Liu**, **Teodor Duevski**")
+
+    st.markdown("  ")
+    st.markdown("---")
+
+    # default text for st.text_area()
+    default_text = ""
 
 
 
@@ -316,9 +333,13 @@ if check_password():
     #st.sidebar.divider()
     #st.sidebar.markdown("---")
 
+    ############# OPEN CHATBOT (Langchain OpenAI) #############
+    # if st.sidebar.button('**Open Chatbot**'):
+    #     st.write("Hello")
+
 
     ############# SELECT TEACHER  ###############
-    list_teachers = ["François Derien","Irina Zviadadze","Mian Liu","Teodor Duevski","Quirin Fleckenstein"]
+    list_teachers = ["François Derien","Irina Zviadadze","Quirin Fleckenstein", "Mian Liu","Teodor Duevski"]
     select_teacher = st.sidebar.selectbox('Select your teacher ➡️', list_teachers)
 
 
@@ -352,24 +373,10 @@ if check_password():
     lab_numbers = st.sidebar.selectbox('Select the exercise ➡️', [
     '01 - One risky and one risk-free asset',
     '02 - Two risky assets',
+    '03 - New features'
     #   '03 - Diversification',
     #   '04 - Test of the CAPM',
     ])
-
-
-
-    # ########### TITLE #############
-
-    st.image(image_hec, width=300)
-    st.title("HEC Paris - Finance Labs🧪")
-    st.subheader("Portfolio theory 📈")
-    st.markdown("Course provided by: **François Derrien**, **Irina Zviadadze**, **Mian Liu**, **Teodor Duevski**, **Quirin Fleckenstein**")
-
-    st.markdown("  ")
-    st.markdown("---")
-
-    # default text for st.text_area()
-    default_text = ""
 
 
 
@@ -1146,8 +1153,6 @@ if check_password():
 
 
 
-
-
     #////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -1913,6 +1918,50 @@ if check_password():
 
 
 
+    if lab_numbers == "03 - New features": 
+
+        st.markdown("## 03 - New features on the app")
+        st.info("This page provides demos for the new features we will or could include on the HEC Finance Lab.")
+        
+        st.markdown("  ")
+
+        st.subheader("**1. AI Chatbot 🤖**")
+        st.markdown("Students can ask questions to the AI ChatBot powered with **OpenAI**.")
+        
+
+        # OpenAI chatbot
+        def generate_response(input_text, key):
+            llm = OpenAI(temperature=0.7, openai_api_key=openai_api_key)
+            st.info(llm(input_text))
+
+        openai_api_key = st.secrets["langchain_openai"]["key"]
+
+        with st.form('my_form'):
+            text = st.text_area('Enter text:', 'Ask any question')
+            submitted = st.form_submit_button('Submit')
+            if submitted :
+                generate_response(text, key=openai_api_key)
+        
+        st.markdown("  ")
+        st.markdown("  ")
+
+        
+        st.subheader("**2. Integrated Python cell 💻**")
+        st.markdown("Students can write Python code directly on the app using JupyterLite.")
+        
+        def example():
+            jupyterlite(300,1300)
+        
+        example()
+
+        st.sidebar.divider()
+        st.sidebar.image(image_hiparis, width=150)
+        url = "https://www.hi-paris.fr/"
+        st.sidebar.markdown("**Made in collaboration with: [Hi! PARIS Engineering Team](%s)**" % url)
+        
+
+
+
 
     # if lab_numbers == "03 - Diversification":
 
@@ -1929,24 +1978,6 @@ if check_password():
     #     st.markdown(" ")
     #     st.markdown(" ")
     #     st.markdown("#### Congratulations you finished Exercise 4 🎉")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
