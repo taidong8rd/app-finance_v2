@@ -270,7 +270,7 @@ def check_password():
 
     def password_entered():
         """Checks whether a password entered by the user is correct."""
-        if st.session_state["password"] == st.secrets["password"]:
+        if "password" in st.session_state and st.session_state["password"] == st.secrets["password"]:
             st.session_state["password_correct"] = True
             del st.session_state["password"]  # don't store password
         else:
@@ -292,6 +292,7 @@ def check_password():
     else:
         # Password correct.
         return True
+
 
 if check_password():
     # st.write("Here goes your normal Streamlit app...")
@@ -1129,6 +1130,7 @@ if check_password():
                 ## Append new row to the google sheet
                 sh = gc.open('App-finance-HEC-students-results').sheet1
                 insertRow = list_answers_
+                st.write(insertRow)
                 sh.append_row(insertRow)
 
                 sh_looker = gc.open('App-finance-HEC-students-results').get_worksheet(2)
@@ -1550,7 +1552,7 @@ if check_password():
 
             upload_efficient_portfolios = st.file_uploader("Drop your results in an excel file (.xlsx)", key="Q3.Ex2.U12",type=['xlsx'])
             if upload_efficient_portfolios is not None:
-                answer_2_Q3_2 = upload_efficient_portfolios
+                answer_2_Q3_2 = upload_efficient_portfolios.name
 
             else:
                 answer_2_Q3_2 = ""
@@ -1724,7 +1726,8 @@ if check_password():
             #weight_portfoliosR = np.round(np.arange(-0.5,1.55,0.05),2)
             #weight_riskfree = 1 - weight_portfoliosR
 
-            weight_portfoliosR = np.round(np.arange(0,1.01,0.01),2)
+            #weight_portfoliosR = np.round(np.arange(0,1.01,0.01),2)
+            weight_portfoliosR = np.round(np.arange(0.1,1.2,0.01),2)
             weight_riskfree = 1 - weight_portfoliosR
 
             weight_risk1_full = []
@@ -1746,7 +1749,13 @@ if check_password():
                     weight_risk1_portfolioR.append(w1/wp)
                     weight_risk2_portfolioR.append((wp-w1)/wp)
 
-
+                    #if wp != 0:
+                    #    weight_risk1_portfolioR.append(w1/wp)
+                    #    weight_risk2_portfolioR.append((wp-w1)/wp)
+                    #else:
+                    #    # Handle the case when wp is zero. You can append NaN, None, or some default value.
+                    #    weight_risk1_portfolioR.append(None)
+                    #    weight_risk2_portfolioR.append(None)
 
             df_full_portfolio = pd.DataFrame({risky_asset1_ex2:np.round(weight_risk1_full,2),
                                             f"{risky_asset1_ex2} (in risky portfolio)":np.round(weight_risk1_portfolioR,2),
@@ -1783,7 +1792,7 @@ if check_password():
             st.write("**What is the set of efficient portfolios ?**")
             upload_efficient_portfolios = st.file_uploader("Drop your results in an excel file (.xlsx)", key="UQ6.Ex6",type=['xlsx'])
             if upload_efficient_portfolios is not None:
-                answer_2_Q6 = upload_efficient_portfolios
+                answer_2_Q6 = upload_efficient_portfolios.name
             else:
                 answer_2_Q6 = ""
 
@@ -1896,6 +1905,7 @@ if check_password():
                     ## Append new row to the google sheet
                     sh = gc.open('App-finance-HEC-students-results').get_worksheet(1)
                     insertRow = list_answers_
+                    st.write(list_answers_)
                     sh.append_row(insertRow)
 
                     sh_looker = gc.open('App-finance-HEC-students-results').get_worksheet(2)
