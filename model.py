@@ -466,6 +466,30 @@ if check_password():
 
         st.markdown("   ")
 
+        # Altair graph with two tabs
+        # Altair graph with 2 tabs
+
+        df_risky_graph = df_risky.drop(columns=["Stock"]).melt(id_vars=["Year"])
+        df_fullrisky_graph = data.drop(columns=["Dividends"]).melt(id_vars=["Year","Stock"]).drop(columns=["variable"])
+
+        chart1 = alt.Chart(df_risky_graph).mark_line(point=True).encode(x="Year", y="value", color="variable").properties(title=f'View the price evolution of {risky_asset} with dividends')
+        chart2 = alt.Chart(df_fullrisky_graph).mark_line().encode(x="Year", y="value", color="Stock").properties(title=f'View the price of evolution of every stock')
+        
+        
+        tab1, tab2 = st.tabs([f"Price Evolution of {risky_asset} (with dividends)", "Price Evolution of every stock"])
+
+        with tab1:
+            st.altair_chart(chart1, use_container_width=True)
+        with tab2:
+            st.altair_chart(chart2, use_container_width=True)
+
+        # df_risky_graph = df_risky.drop(columns=["Stock"]).melt(id_vars=["Year"])
+        # chart = alt.Chart(df_risky_graph).mark_line(point=True).encode(x="Year", y="value", color="variable").properties(title=f'View the stock price evolution ({risky_asset}) with dividends')
+        # st.altair_chart(chart, use_container_width=True)
+
+
+        #st.markdown("   ")
+
         # ## View risky dataset
         st.markdown(f"**View the {risky_asset} data** with Date, Dividend and Price.")
         st.dataframe(df_risky.drop(columns=["Stock"]))
@@ -497,6 +521,7 @@ if check_password():
 
         st.markdown("   ")
         st.markdown("   ")
+        
 
 
         # Compute holding-period returns, expected returns, std 
@@ -1230,10 +1255,32 @@ if check_password():
             df_asset1_ex2_m.columns = ["Year",f"Price ({risky_asset1_ex2})",f"Dividends ({risky_asset1_ex2})"]
             df_asset2_ex2_m = df_asset2_ex2[["Year","Price","Dividends"]]
             df_asset2_ex2_m.columns = ["Year",f"Price ({risky_asset2_ex2})",f"Dividends ({risky_asset2_ex2})"]
-            
             df_asset_ex2_merge = df_asset1_ex2_m.merge(df_asset2_ex2_m,on="Year")
+            
+
+            # Altair graph with 2 tabs
+            df_asset_ex2_graph1 = df_asset_ex2_merge.drop(columns=[f"Dividends ({risky_asset1_ex2})",
+                                                                  f"Dividends ({risky_asset2_ex2})"]).melt(id_vars=["Year"])
+            df_asset_ex2_graph2 = df_asset_ex2_merge.drop(columns=[f"Price ({risky_asset1_ex2})",
+                                                                  f"Price ({risky_asset2_ex2})"]).melt(id_vars=["Year"])
+            
+            chart1 = alt.Chart(df_asset_ex2_graph1).mark_line(point=True).encode(x="Year", y="value", color="variable").properties(title=f'View the stock price evolution of {risky_asset1_ex2} and {risky_asset2_ex2}')
+            chart2 = alt.Chart(df_asset_ex2_graph2).mark_line(point=True).encode(x="Year", y="value", color="variable").properties(title=f'View the dividends evolution of {risky_asset1_ex2} and {risky_asset2_ex2} ')
+
+            
+            tab1, tab2 = st.tabs(["Stock Price Evolution", "Dividends Evolution"])
+
+            with tab1:
+                st.altair_chart(chart1, use_container_width=True)
+            with tab2:
+                st.altair_chart(chart2, use_container_width=True)
+
+            #chart = alt.Chart(df_asset_ex2_graph).mark_line(point=True).encode(x="Year", y="value", color="variable").properties(title=f'View the stock price evolution ({risky_asset1_ex2},{risky_asset2_ex2}) with dividends')
+            #st.altair_chart(chart, use_container_width=True)
+            
+            
             st.markdown(f"View Price and Dividends for **{risky_asset1_ex2}** and **{risky_asset2_ex2}**")
-            st.dataframe(df_asset_ex2_merge, use_container_width=True)
+            st.dataframe(df_asset_ex2_merge)
 
 
 
@@ -1931,18 +1978,24 @@ if check_password():
     if lab_numbers == "03 - New features": 
 
         st.markdown("## 03 - New features on the app")
-        st.info("This page provides demos for the new features we will or could include on the HEC Finance Lab.")
+        st.info("""This page provides demos for the new features we will add to the HEC Finance Lab.""")
         
         st.markdown("  ")
 
         st.subheader("**1. AI Chatbot 🤖**")
-        st.markdown("Students can ask questions to the AI ChatBot powered with **OpenAI**.")
+        st.markdown("""Students can ask questions to the AI ChatBot powered with **OpenAI**. <br>
+                    The chatbot could help students gain insights on key financial concepts, and even help them write code in Excel/Python.""", unsafe_allow_html=True)
+
+        from PIL import Image
+
+        image = Image.open('images/chatbot.png')
+        st.image(image, width=400)
         
 
         # OpenAI chatbot
         def generate_response(input_text, key):
             llm = OpenAI(temperature=0.7, openai_api_key=openai_api_key)
-            st.info(llm(input_text))
+            st.warning(llm(input_text))
 
         openai_api_key = st.secrets["langchain_openai"]["key"]
 
@@ -1957,7 +2010,11 @@ if check_password():
 
         
         st.subheader("**2. Integrated Python cell 💻**")
-        st.markdown("Students can write Python code directly on the app using JupyterLite.")
+        st.markdown("""Students can write Python code directly on the app using <b>JupyterLite</b>. <br>
+                    They could be asked to answer questions using Python, instead of Excel, directly on the HEC Finance Lab app.""", unsafe_allow_html=True)
+        
+        image = Image.open('images/python-code.jpeg')
+        st.image(image, width=500)
         
         def example():
             jupyterlite(300,1300)
