@@ -55,11 +55,7 @@ st.set_option('deprecation.showPyplotGlobalUse', False)
 
 
 
-
-
-
 # Configuration de l'app (html, java script like venv\)
-
 # Deploy the app localy in terminal: streamlit run model.py
 
 st.set_page_config(
@@ -252,7 +248,12 @@ image_hiparis = Image.open('images/hi-paris.png')
 # pd.DataFrame(student_ids,columns=["Student ID"]).to_csv("student_ids.csv",index=True)
 # pd.DataFrame(list_section_code,columns=["Section code"]).to_csv("section_code.csv",index=True)
 
-student_ids = pd.read_csv("student_ids.csv")["Student ID"].to_list()
+student_ids_df = pd.read_csv(r"student_idsv2.csv", header=None)
+student_ids_df.columns = ["Student ID"]
+student_ids_df.sort_values(by=["Student ID"], inplace=True)
+student_ids = student_ids_df["Student ID"].to_list()
+#student_ids = pd.read_csv("student_ids.csv")["Student ID"].to_list()
+
 list_section_code = [f"B1-{i}" for i in range(1,15)]
 list_section_code.append("B4-1")
 list_section_code.append("B4-2")
@@ -374,9 +375,7 @@ if check_password():
     lab_numbers = st.sidebar.selectbox('Select the exercise ➡️', [
     '01 - One risky and one risk-free asset',
     '02 - Two risky assets',
-    '03 - New features'
-    #   '03 - Diversification',
-    #   '04 - Test of the CAPM',
+    #'03 - New features'
     ])
 
 
@@ -2026,28 +2025,6 @@ if check_password():
         url = "https://www.hi-paris.fr/"
         st.sidebar.markdown("**Made in collaboration with: [Hi! PARIS Engineering Team](%s)**" % url)
         
-
-
-
-
-    # if lab_numbers == "03 - Diversification":
-
-    #     st.info("This page is a work in progress. Please check back later.")
-    #     st.markdown(" ")
-    #     st.markdown(" ")
-    #     st.markdown("#### Congratulations you finished Exercise 3 🎉")
-
-
-    # if lab_numbers == "04 - Test of the CAPM":
-
-        
-    #     st.info("This page is a work in progress. Please check back later.")
-    #     st.markdown(" ")
-    #     st.markdown(" ")
-    #     st.markdown("#### Congratulations you finished Exercise 4 🎉")
-
-
-
 
 
 
