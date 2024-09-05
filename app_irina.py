@@ -1,6 +1,5 @@
 import pandas as pd
 from PIL import Image 
-from PIL import Image
 import streamlit as st
 
 from labs.lab1 import lab1_code
