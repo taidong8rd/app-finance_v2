@@ -30,7 +30,7 @@ share/python-wheels/
 MANIFEST
 
 # Data files
-data/
+# data/
 
 
 
