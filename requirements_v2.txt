@@ -1,13 +1,16 @@
 altair==5.4.1
 gspread==6.1.2
 htbuilder==0.6.2
-numpy==1.24.3
+# langchain==0.2.16
+# matplotlib==3.7.2
+numpy
 pandas==2.2.2
 pandas_datareader==0.10.0
-Pillow==9.5.0
-protobuf==5.28.0
+# Pillow==9.5.0
+#Pillow==10.4.0
+protobuf
 pyxlsb==1.0.10
 seaborn==0.13.2
-streamlit==1.38.0
+streamlit==1.26.0
 streamlit_extras==0.4.7
 vega_datasets==0.9.0
