@@ -1,4 +1,5 @@
 altair==5.4.1
+distutils
 gspread==6.1.2
 htbuilder==0.6.2
 numpy==1.24.3
